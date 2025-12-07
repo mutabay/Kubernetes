@@ -1,0 +1,23 @@
+FROM debian:12-slim
+
+# Install SSH server and basic tools
+RUN apt-get update && \
+    apt-get install -y \
+    openssh-server \
+    curl \
+    wget \
+    vim \
+    net-tools \
+    iputils-ping \
+    sudo && \
+    rm -rf /var/lib/apt/lists/*
+
+# Configure SSH
+RUN mkdir /var/run/sshd && \
+    echo 'root:k8s-hard-way' | chpasswd && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]k
