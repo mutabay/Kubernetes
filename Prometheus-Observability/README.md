@@ -1,7 +1,9 @@
 # Prometheus & Observability — Essential Learning Notes
 
-This document summarises the key concepts, roadmap, and practice tasks for mastering Prometheus observability — a core skill for SRE, DevOps, and AIOps work.
+This document summarises the key concepts, roadmap, and practice tasks for mastering Prometheus observability.
+Observability focuses on understanding the internal state of your systems based on the data they produce, which helps determine if your infrastructure is healthy. Prometheus is a core technology for monitoring and observability of systems.
 
+The **Node Exporter** is a component of the Prometheus monitoring ecosystem, used to collect and export information about a node’s (server’s) hardware and operating system in a format that can be read by Prometheus. It is especially useful for providing information about the performance and state of system resources such as CPU, memory, disk, network, and so on.
 ---
 
 ## 1. Prometheus Data Model
@@ -33,6 +35,7 @@ Example exporter metrics: my_queue_length 42 , my_failures_total 3
 ---
 
 ## 3. PromQL Basics
+Time series data can be stored at any relational database. However, these systems are not developed to store and query large volumes of time series data. Prometheus provide tools to compact and optimize time series data.
 PromQL is how you query metrics.
 
 Important functions:
@@ -74,15 +77,6 @@ expr: rate(http_requests_total[5m])
 - Faster alerts  
 - Less load on Prometheus
 
----
-
-## 6. Thanos (Optional)
-Adds:
-- Long-term storage (S3/GCS)  
-- Global querying  
-- Downsampling  
-
-**Used in production clusters requiring months/years of metrics.**
 
 ---
 
@@ -122,9 +116,6 @@ Build dashboards for:
 ### Phase 6: Grafana
 - Build dashboards for SLOs and health metrics  
 
-### Phase 7: Thanos (Optional)
-- Explore long-term storage and global querying  
-
 
 ---
 
@@ -135,6 +126,19 @@ Prometheus is built around:
 - **Alerts** → detect issues  
 - **Recording rules** → speed  
 - **Grafana dashboards** → visualize health  
-- **Thanos** → scale and long-term retention  
 
-Mastering these gives you a strong foundation for AIOps and SRE work.
+---
+## Quick Practical Setup
+
+1. Clone this repo and open in VS Code.
+2. Make sure Docker Desktop is running.
+3. Run `docker compose up --build` in the project folder.
+4. Access services:
+	- Prometheus: http://localhost:9090
+	- Grafana: http://localhost:3000 (admin/admin)
+	- Node Exporter: http://localhost:9100/metrics
+	- Python Exporter: http://localhost:8000/metrics
+5. In Grafana, add Prometheus as a data source (URL: `http://prometheus:9090`).
+6. Create a dashboard and visualize the metric `my_queue_length`.
+
+That's it! You now have a working observability stack for hands-on learning.
